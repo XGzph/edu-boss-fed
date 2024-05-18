@@ -5,16 +5,16 @@
 </template>
 
 <script>
-import request from '@/utils/request'
+// import request from '@/utils/request'
 
-request({
-  method: 'GET',
-  // front地址失效
-  // url: '/front/ad/getAdList'
-  url: '/boss/v2/api-docs?group=edu-boss-boot'
-}).then(res => {
-  console.log(res)
-})
+// request({
+//   method: 'GET',
+//   // front地址失效
+//   // url: '/front/ad/getAdList'
+//   url: '/boss/v2/api-docs?group=edu-boss-boot'
+// }).then(res => {
+//   console.log(res)
+// })
 
 export default {
   name: 'App'
