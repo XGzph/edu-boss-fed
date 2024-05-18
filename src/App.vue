@@ -9,7 +9,9 @@ import request from '@/utils/request'
 
 request({
   method: 'GET',
-  url: 'http://edufront.lagounews.com/front/ad/getAdList'
+  // front地址失效
+  // url: '/front/ad/getAdList'
+  url: '/boss/v2/api-docs?group=edu-boss-boot'
 }).then(res => {
   console.log(res)
 })
