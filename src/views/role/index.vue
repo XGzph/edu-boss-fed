@@ -1,5 +1,5 @@
 <template>
-  <div class="role">规则管理</div>
+  <div class="role">角色管理</div>
 </template>
 
 <script>
