@@ -8,6 +8,7 @@ function getBaseURl (url) {
   if (url.startsWith('/boss')) {
     return 'http://eduboss.lagounews.com'
   } else {
+    // 地址失效了
     return 'http://edufront.lagounews.com'
   }
 }
