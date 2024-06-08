@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '@/store'
 
 // 引入路由中所需要的使用的组件功能
 // import Login from '@/views/login/index.vue'
@@ -26,6 +27,9 @@ const routes = [
   {
     path: '/',
     component: () => import(/* webpackChunkName: 'layout' */'@/views/layout/index.vue'),
+    meta: {
+      requiresAuth: true
+    },
     children: [
       {
         path: '',
@@ -81,4 +85,20 @@ const router = new VueRouter({
   routes
 })
 
+// 前置导航守卫设置
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!store.state.user) {
+      return next({
+        name: 'login',
+        query: {
+          redirect: to.fullPath
+        }
+      })
+    }
+    next()
+  } else {
+    next()
+  }
+})
 export default router
