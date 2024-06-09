@@ -10,11 +10,11 @@
     <!-- 右侧 -->
     <el-dropdown>
       <span class="el-dropdown-link">
-        <el-avatar :size="30" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"></el-avatar>
+        <el-avatar :size="30" :src="userInfo.portrait || 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'"></el-avatar>
         <i class="el-icon-arrow-down el-icon--right"></i>
       </span>
       <el-dropdown-menu slot="dropdown" style="width: 100px;">
-        <el-dropdown-item>用户信息</el-dropdown-item>
+        <el-dropdown-item>{{ userInfo.userName }}</el-dropdown-item>
         <el-dropdown-item divided>登录退出</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -22,8 +22,26 @@
 </template>
 
 <script>
+// 用户信息接口
+import { getUserInfo } from '@/services/user'
+
 export default {
-  name: 'app-header'
+  name: 'app-header',
+  created () {
+    this.loadUserInfo()
+  },
+  data () {
+    return {
+      // 用户信息
+      userInfo: {}
+    }
+  },
+  methods: {
+    async loadUserInfo () {
+      const { data } = await getUserInfo()
+      this.userInfo = data.content
+    }
+  }
 }
 </script>
 

@@ -9,3 +9,10 @@ export const login = data => {
     data: qs.stringify(data)
   })
 }
+// 用户基本信息
+export const getUserInfo = () => {
+  return request({
+    method: 'GET',
+    url: '/front/user/getInfo'
+  })
+}
