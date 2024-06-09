@@ -1,5 +1,6 @@
 import axios from 'axios'
 import store from '@/store'
+import { Message } from 'element-ui'
 
 const request = axios.create({
   // timeout: 5000
@@ -25,3 +26,33 @@ request.interceptors.request.use(function (config) {
   return config
 })
 export default request
+
+// 响应拦截器
+request.interceptors.response.use(function (response) {
+  return response
+}, function (error) {
+  if (error.response) {
+    // 状态码为失败的概况
+    const { status } = error.response
+    let errorMessage = ''
+    if (status === 400) {
+      errorMessage = '请求参数错误'
+    } else if (status === 401) {
+      errorMessage = 'Token 无效'
+    } else if (status === 403) {
+      errorMessage = '没有权限，联系管理员'
+    } else if (status === 404) {
+      errorMessage = '请求资源不存在'
+    } else if (status === 500) {
+      errorMessage = '服务端错误，联系管理员'
+    }
+    Message.error(errorMessage)
+  } else if (error.request) {
+    // 请求发送未收到响应
+    Message.error('请求超时请重试')
+  } else {
+    // 其他状况
+    Message.error(error.message)
+  }
+  return Promise.reject(error)
+})
