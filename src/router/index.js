@@ -70,8 +70,12 @@ const routes = [
         path: '/advert-space',
         name: 'error-page',
         component: () => import(/* webpackChunkName: 'error-page' */'@/views/advert-space/index.vue')
+      },
+      {
+        path: '/menu/create',
+        name: 'menu-create',
+        component: () => import(/* webpackChunkName: 'menu-create' */'@/views/menu/create.vue')
       }
-
     ]
   },
   {
