@@ -1,6 +1,8 @@
 import axios from 'axios'
 import store from '@/store'
 import { Message } from 'element-ui'
+import router from '@/router'
+import qs from 'qs'
 
 const request = axios.create({
   // timeout: 5000
@@ -27,6 +29,20 @@ request.interceptors.request.use(function (config) {
 })
 export default request
 
+function redirectLogin () {
+  router.push({
+    name: 'login',
+    query: {
+      // 存储路由信息
+      redirect: router.currentRoute.fullPath
+    }
+  })
+}
+
+// 存储是否正在更新Token状态
+let isRefreshing = false
+let requests = []
+
 // 响应拦截器
 request.interceptors.response.use(function (response) {
   return response
@@ -36,7 +52,40 @@ request.interceptors.response.use(function (response) {
     const { status } = error.response
     let errorMessage = ''
     if (status === 400) {
-      errorMessage = '请求参数错误'
+      // 没有Token
+      if (!store.state.user) {
+        redirectLogin()
+        return Promise.reject(error)
+      }
+      // 检测是否
+      if (isRefreshing) {
+        return requests.push(() => {
+          request(error.config)
+        })
+      }
+      isRefreshing = true
+      // Token无效
+      return request({
+        method: 'POST',
+        url: '/front/user/refresh_token',
+        data: qs.stringify({
+          refreshatolen: store.state.user.refresh_token
+        })
+      }).then(res => {
+        if (res.data.state !== 1) {
+          store.commit('setUser', null)
+          redirectLogin()
+          return Promise.reject(error)
+        }
+        store.commit('setUser', res.data.content)
+        requests.forEach(callback => callback())
+        requests = []
+        return request(error.config)
+      }).catch(err => {
+        console.log(err)
+      }).finally(() => {
+        isRefreshing = false
+      })
     } else if (status === 401) {
       errorMessage = 'Token 无效'
     } else if (status === 403) {
