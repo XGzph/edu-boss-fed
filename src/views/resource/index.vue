@@ -1,10 +1,14 @@
 <template>
-  <div class="resource">资源管理</div>
+  <div class="resource">
+    <resource-list></resource-list>
+  </div>
 </template>
 
 <script>
+import ResourceList from './components/resource-list.vue'
 export default {
-  name: 'resource-index'
+  name: 'resource-index',
+  components: { ResourceList }
 }
 </script>
 

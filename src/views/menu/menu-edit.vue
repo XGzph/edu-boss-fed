@@ -1,16 +1,14 @@
 <template>
-  <div class="menu-create">
-    <create-edit></create-edit>
+  <div class="menu-edit">
+    <create-edit :is-edit="true"></create-edit>
   </div>
 </template>
 
 <script>
 import CreateEdit from './components/create-edit.vue'
 export default {
-  name: 'menu-create',
-  components: {
-    CreateEdit
-  }
+  name: 'menu-edit',
+  components: { CreateEdit }
 }
 </script>
 
